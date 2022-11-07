@@ -1,3 +1,6 @@
+import platform from './img/platform.png'
+console.log(platform)
+
 //game setup
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -8,6 +11,7 @@ canvas.height = window.innerHeight;
 
 //global gravity
 const gravity = 0.5;
+
 //player creation
 class Player{
     constructor(){
@@ -42,6 +46,7 @@ class Player{
     }
 }
 
+//platform creation
 class Platform{
     constructor({x, y}){
         this.position = {
@@ -71,6 +76,9 @@ const keys = {
     }
 }
 
+let scrollOffet = 0
+
+//game functions
 function animate(){
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
@@ -88,11 +96,13 @@ function animate(){
     }else {
         player.velocity.x = 0
         if (keys.right.pressed){
+            scrollOffet += 5
             platforms.forEach(platform => {
                 platform.position.x -= 5
             })
             //platform.position.x -= 5
         }else if(keys.left.pressed){
+            scrollOffet -= 5
             platforms.forEach(platform => {
                 platform.position.x += 5
             })
@@ -109,10 +119,16 @@ function animate(){
             player.velocity.y = 0
         }
     })
+
+    //winning scinario
+    if(scrollOffet > 2000){
+        console.log("You Won!!!")
+    }
 }
 
 animate()
-//player movement
+
+//player keydown movement
 addEventListener('keydown', ({keyCode}) => {
     //console.log(keyCode)
     switch(keyCode){
@@ -136,7 +152,7 @@ addEventListener('keydown', ({keyCode}) => {
     //console.log(keys.right.pressed)
 });
 
-
+//player keyup movement
 addEventListener('keyup', ({keyCode}) => {
     //console.log(keyCode)
     switch(keyCode){
